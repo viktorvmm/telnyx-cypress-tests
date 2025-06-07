@@ -17,24 +17,28 @@ describe('Registration Page - Additional Elements Check', () => {
       .and('not.be.disabled');
 
     // Клік на кнопку "Apply a promo code"
-cy.get('button.c-ewUecD').click();
+    cy.get('button.c-ewUecD').click();
 
-// Перевірка появи поля для промокоду та його лейбла
-cy.get('label[for="promo_code"]', { timeout: 10000 })
-  .should('be.visible')
-  .and('contain.text', 'Promo code');
+    // Логування властивості disabled у поля для промокоду
+    cy.get('#promo_code').then($el => {
+      cy.log('Поле promo_code disabled:', $el.prop('disabled'));
+    });
 
-// Перевірка тексту "Optional" у лейблі
-cy.get('label[for="promo_code"] em', { timeout: 10000 })
-  .should('be.visible')
-  .and('contain.text', 'Optional');
+    // Перевірка появи поля для промокоду та його лейбла
+    cy.get('label[for="promo_code"]', { timeout: 10000 })
+      .should('be.visible')
+      .and('contain.text', 'Promo code');
 
-// Введення промокоду з перевіркою, що поле не disabled
-cy.get('#promo_code', { timeout: 10000 })
-  .should('be.visible')
-  .and('not.be.disabled')
-  .type('PROMO2025')
-  .should('have.value', 'PROMO2025');
+    // Перевірка тексту "Optional" у лейблі
+    cy.get('label[for="promo_code"] em', { timeout: 10000 })
+      .should('be.visible')
+      .and('contain.text', 'Optional');
 
+    // Очікуємо, що поле стане активним (не disabled) перед введенням
+    cy.get('#promo_code', { timeout: 10000 })
+      .should('be.visible')
+      .and('not.be.disabled')
+      .type('PROMO2025')
+      .should('have.value', 'PROMO2025');
   });
 });
