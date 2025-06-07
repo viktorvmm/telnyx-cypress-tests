@@ -22,8 +22,8 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Run Cypress tests
-        run: npx cypress run
+      - name: Run Cypress tests and record results
+        run: npx cypress run --record --key ${{ secrets.CYPRESS_RECORD_KEY  }}
 
       - name: Upload Cypress videos
         if: always()
