@@ -1,3 +1,5 @@
+import { signUpPage } from '../support/page_objects/signUpPage';
+
 function getRandomString(length) {
   const chars = 'abcdefghijklmnopqrstuvwxyz';
   let result = '';
@@ -41,13 +43,8 @@ function getRandomPassword() {
 
 describe('User can register with valid data including marketing emails subscription', () => {
   beforeEach(() => {
-    cy.visit('/sign-up');
-
-    cy.get('body').then(($body) => {
-      if ($body.find('button.onetrust-close-btn-handler').length > 0) {
-        cy.get('button.onetrust-close-btn-handler').click({ force: true });
-      }
-    });
+    signUpPage.visit();
+    signUpPage.closeCookiesBanner();
   });
 
   it('User can register with random valid data and checkbox checked', () => {
@@ -58,32 +55,30 @@ describe('User can register with valid data including marketing emails subscript
 
     cy.log('Generated password:', password);
 
-    cy.get('[name="first_name"]').type(firstName);
-    cy.get('[name="last_name"]').type(lastName);
-    cy.get('[name="email"]').type(email);
-    cy.get('[name="password"]').type(password);
+    signUpPage.typeFirstName(firstName);
+    signUpPage.typeLastName(lastName);
+    signUpPage.typeEmail(email);
+    signUpPage.typePassword(password);
 
-    // Спочатку знімаємо вибір (якщо стоїть)
-  cy.get('#subscription_opt_in')
-    .should('exist')
-    .should('be.visible')
-    .uncheck()
-    .should('not.be.checked');
-
-  // Клік по тексту лейблу, щоб активувати чекбокс
-  cy.get('#terms_and_conditions').click();
-
-      // Використовуємо більш надійний селектор кнопки реєстрації
-    cy.get('[data-content="SIGN UP"]', { timeout: 10000 })
+    // Знімаємо підписку на маркетингові емейли (якщо стоїть)
+    cy.get('#subscription_opt_in')
+      .should('exist')
       .should('be.visible')
-      .click();
+      .uncheck()
+      .should('not.be.checked');
 
-    // Збільшуємо таймаут очікування URL
+    // Активуємо чекбокс "terms and conditions"
+    signUpPage.checkTerms();
+
+    // Клік по кнопці Sign Up
+    signUpPage.clickSignUpButton();
+
+    // Очікуємо правильне перенаправлення
     cy.url({ timeout: 15000 }).should('include', 'https://telnyx.com/sign-up');
 
+    // Перевіряємо, що після реєстрації є видимий потрібний елемент
     cy.get('#__next > div > main > section', { timeout: 5000 })
-  .should('exist')
-  .and('be.visible');
-
+      .should('exist')
+      .and('be.visible');
   });
 });
