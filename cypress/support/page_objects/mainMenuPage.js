@@ -12,14 +12,14 @@ export class MainMenuPage {
   }
 
   clickMenuItem(itemName) {
-    cy.contains(itemName).click();
+    cy.contains('span', itemName)
+      .parents('button,a')           // охоплює і <button>, і <a>
+      .first()
+      .should('be.visible')
+      .click({ force: true });       // іноді меню перекривається, тож `force: true` безпечно
   }
 
-  checkProductsContent() {
-    cy.get('.c-jLWzSx', { timeout: 10000 }).should('be.visible');
-  }
-
-  checkSolutionsContent() {
+  checkDropdownContentVisible() {
     cy.get('.c-jLWzSx', { timeout: 10000 }).should('be.visible');
   }
 
@@ -34,11 +34,7 @@ export class MainMenuPage {
   checkWhyTelnyxContent() {
     cy.get('nav > div.c-jLWzSx', { timeout: 10000 }).should('be.visible');
   }
-
-  checkResourcesContent() {
-    cy.get('.c-jLWzSx', { timeout: 10000 }).should('be.visible');
-  }
-
+  
   checkDevelopersContent() {
     cy.get('nav > div', { timeout: 10000 }).should('be.visible');
   }

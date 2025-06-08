@@ -8,12 +8,12 @@ describe('Navigation through main menu items', () => {
 
   it('Navigates to Products and checks content', () => {
     mainMenuPage.clickMenuItem('Products');
-    mainMenuPage.checkProductsContent();
+    mainMenuPage.checkDropdownContentVisible();
   });
 
   it('Navigates to Solutions and checks content', () => {
     mainMenuPage.clickMenuItem('Solutions');
-    mainMenuPage.checkSolutionsContent();
+    mainMenuPage.checkDropdownContentVisible();
   });
 
   it('Navigates to Pricing and checks URL and content', () => {
@@ -29,7 +29,7 @@ describe('Navigation through main menu items', () => {
 
   it('Navigates to Resources and checks content', () => {
     mainMenuPage.clickMenuItem('Resources');
-    mainMenuPage.checkResourcesContent();
+    mainMenuPage.checkDropdownContentVisible();
   });
 
   it('Navigates to Developers and checks content', () => {
